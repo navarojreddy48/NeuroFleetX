@@ -1,0 +1,16 @@
+com\neurofleetx\dto\AuthResponse.class
+com\neurofleetx\model\User.class
+com\neurofleetx\model\Role.class
+com\neurofleetx\service\AuthService$1.class
+com\neurofleetx\dto\RegisterRequest.class
+com\neurofleetx\NeuroFleetXApplication.class
+com\neurofleetx\controller\AuthController.class
+com\neurofleetx\service\CustomUserDetailsService.class
+com\neurofleetx\service\AuthService.class
+com\neurofleetx\config\SecurityConfig.class
+com\neurofleetx\model\User$UserBuilder.class
+com\neurofleetx\config\JwtAuthenticationFilter.class
+com\neurofleetx\dto\AuthResponse$AuthResponseBuilder.class
+com\neurofleetx\repository\UserRepository.class
+com\neurofleetx\config\JwtService.class
+com\neurofleetx\dto\LoginRequest.class
