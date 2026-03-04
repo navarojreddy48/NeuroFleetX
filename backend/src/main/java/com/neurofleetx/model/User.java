@@ -1,15 +1,6 @@
 package com.neurofleetx.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,36 +22,41 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String fullName;
+    @Column(name = "full_name", nullable = false)
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "password", nullable = false)
+    private String passwordHash;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
-    @Column(nullable = false)
+    @Column(name = "gender")
     private String gender;
 
-    private String registrationNumber;
-
+    @Column(name = "company_name")
     private String companyName;
 
-    private String licenseNumber;
-
+    @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "city")
     private String city;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "license_number")
+    private String licenseNumber;
+
+    @Column(name = "registration_number")
+    private String registrationNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist
@@ -75,3 +71,4 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 }
+

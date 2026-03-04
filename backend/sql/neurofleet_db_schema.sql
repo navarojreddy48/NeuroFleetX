@@ -1,0 +1,182 @@
+CREATE DATABASE IF NOT EXISTS neurofleet_db;
+USE neurofleet_db;
+
+CREATE TABLE IF NOT EXISTS roles (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  role_name ENUM('ADMIN','FLEET_MANAGER','DRIVER') NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(180) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role_id BIGINT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+CREATE TABLE IF NOT EXISTS drivers (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL UNIQUE,
+  license_number VARCHAR(100) NOT NULL UNIQUE,
+  rating DECIMAL(3,2) NOT NULL DEFAULT 4.50,
+  status ENUM('ACTIVE','INACTIVE','ON_TRIP') NOT NULL DEFAULT 'ACTIVE',
+  CONSTRAINT fk_drivers_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS vehicles (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  vehicle_name VARCHAR(120) NOT NULL,
+  registration_number VARCHAR(80) NOT NULL UNIQUE,
+  vehicle_type VARCHAR(50) NOT NULL,
+  battery_percentage INT,
+  battery_health INT,
+  engine_temperature DECIMAL(5,2),
+  tire_wear INT,
+  city VARCHAR(120) NOT NULL,
+  status ENUM('ACTIVE','IDLE','MAINTENANCE') NOT NULL DEFAULT 'ACTIVE'
+);
+
+CREATE TABLE IF NOT EXISTS vehicle_status (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  vehicle_id BIGINT NOT NULL,
+  status ENUM('ACTIVE','IDLE','MAINTENANCE') NOT NULL,
+  recorded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_vehicle_status_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicles(id)
+);
+
+CREATE TABLE IF NOT EXISTS maintenance_records (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  vehicle_id BIGINT NOT NULL,
+  issue VARCHAR(255) NOT NULL,
+  severity ENUM('LOW','MEDIUM','HIGH','CRITICAL') NOT NULL,
+  action_taken VARCHAR(255),
+  serviced_on DATE,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_maintenance_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicles(id)
+);
+
+CREATE TABLE IF NOT EXISTS trips (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  driver_id BIGINT NOT NULL,
+  vehicle_id BIGINT NOT NULL,
+  start_location VARCHAR(200) NOT NULL,
+  end_location VARCHAR(200) NOT NULL,
+  distance DECIMAL(10,2) NOT NULL,
+  duration INT NOT NULL,
+  trip_status ENUM('ONGOING','COMPLETED','CANCELLED') NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_trips_driver FOREIGN KEY (driver_id) REFERENCES drivers(id),
+  CONSTRAINT fk_trips_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicles(id)
+);
+
+CREATE TABLE IF NOT EXISTS routes (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  trip_id BIGINT NOT NULL,
+  route_type ENUM('FASTEST','SHORTEST','ECO') NOT NULL,
+  estimated_time INT NOT NULL,
+  optimized BOOLEAN NOT NULL DEFAULT FALSE,
+  CONSTRAINT fk_routes_trip FOREIGN KEY (trip_id) REFERENCES trips(id)
+);
+
+CREATE TABLE IF NOT EXISTS trip_status (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  trip_id BIGINT NOT NULL,
+  status ENUM('ONGOING','COMPLETED','CANCELLED') NOT NULL,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_trip_status_trip FOREIGN KEY (trip_id) REFERENCES trips(id)
+);
+
+CREATE TABLE IF NOT EXISTS live_tracking (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  trip_id BIGINT NOT NULL,
+  latitude DECIMAL(10,7) NOT NULL,
+  longitude DECIMAL(10,7) NOT NULL,
+  timestamp DATETIME NOT NULL,
+  CONSTRAINT fk_live_tracking_trip FOREIGN KEY (trip_id) REFERENCES trips(id)
+);
+
+CREATE TABLE IF NOT EXISTS traffic_data (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  zone_name VARCHAR(120) NOT NULL,
+  avg_speed DECIMAL(8,2),
+  congestion_index INT NOT NULL,
+  recorded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS traffic_zones (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  zone_name VARCHAR(120) NOT NULL,
+  city VARCHAR(120) NOT NULL,
+  latitude DECIMAL(10,7) NOT NULL,
+  longitude DECIMAL(10,7) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS traffic_heatmap (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  latitude DECIMAL(10,7) NOT NULL,
+  longitude DECIMAL(10,7) NOT NULL,
+  congestion_level INT NOT NULL,
+  recorded_at DATETIME NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS driver_performance (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  driver_id BIGINT NOT NULL,
+  acceptance_rate DECIMAL(5,2),
+  completed_trips INT DEFAULT 0,
+  rating DECIMAL(3,2),
+  recorded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_driver_performance_driver FOREIGN KEY (driver_id) REFERENCES drivers(id)
+);
+
+CREATE TABLE IF NOT EXISTS driver_trips (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  driver_id BIGINT NOT NULL,
+  trip_id BIGINT NOT NULL,
+  assigned_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_driver_trips_driver FOREIGN KEY (driver_id) REFERENCES drivers(id),
+  CONSTRAINT fk_driver_trips_trip FOREIGN KEY (trip_id) REFERENCES trips(id)
+);
+
+CREATE TABLE IF NOT EXISTS driver_earnings (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  driver_id BIGINT NOT NULL,
+  trip_id BIGINT NOT NULL,
+  amount DECIMAL(12,2) NOT NULL,
+  date DATE NOT NULL,
+  CONSTRAINT fk_driver_earnings_driver FOREIGN KEY (driver_id) REFERENCES drivers(id),
+  CONSTRAINT fk_driver_earnings_trip FOREIGN KEY (trip_id) REFERENCES trips(id)
+);
+
+CREATE TABLE IF NOT EXISTS trip_payments (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  trip_id BIGINT NOT NULL,
+  amount DECIMAL(12,2) NOT NULL,
+  payment_status ENUM('PENDING','PAID','FAILED') NOT NULL,
+  paid_at DATETIME,
+  CONSTRAINT fk_trip_payments_trip FOREIGN KEY (trip_id) REFERENCES trips(id)
+);
+
+CREATE TABLE IF NOT EXISTS ai_settings (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  eta_accuracy DECIMAL(5,2) NOT NULL,
+  traffic_weight DECIMAL(5,2) NOT NULL,
+  energy_efficiency_weight DECIMAL(5,2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS route_optimization_parameters (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  max_detour_km DECIMAL(6,2) NOT NULL,
+  avoid_tolls BOOLEAN NOT NULL DEFAULT FALSE,
+  prioritize_ev_routes BOOLEAN NOT NULL DEFAULT TRUE,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO roles (role_name)
+SELECT 'ADMIN' WHERE NOT EXISTS (SELECT 1 FROM roles WHERE role_name='ADMIN');
+INSERT INTO roles (role_name)
+SELECT 'FLEET_MANAGER' WHERE NOT EXISTS (SELECT 1 FROM roles WHERE role_name='FLEET_MANAGER');
+INSERT INTO roles (role_name)
+SELECT 'DRIVER' WHERE NOT EXISTS (SELECT 1 FROM roles WHERE role_name='DRIVER');

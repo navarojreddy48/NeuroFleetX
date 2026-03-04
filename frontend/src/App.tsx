@@ -15,30 +15,30 @@ import Unauthorized from './pages/Unauthorized.jsx'
 import Signup from './pages/Signup.jsx'
 
 const CustomerDashboard = lazy(() => import('./pages/customer/CustomerDashboard.jsx'))
-const PlanTrip = lazy(() => import('./pages/customer/PlanTrip.jsx'))
-const MyBookings = lazy(() => import('./pages/customer/MyBookings.jsx'))
-const MyTrips = lazy(() => import('./pages/customer/MyTrips.jsx'))
+const CustomerPlanTrip = lazy(() => import('./pages/customer/CustomerPlanTrip.jsx'))
+const CustomerMyBookings = lazy(() => import('./pages/customer/CustomerMyBookings.jsx'))
+const CustomerMyTrips = lazy(() => import('./pages/customer/CustomerMyTrips.jsx'))
 const CustomerProfile = lazy(() => import('./pages/customer/CustomerProfile.jsx'))
 const CustomerSettings = lazy(() => import('./pages/customer/CustomerSettings.jsx'))
-const BookingConfirmation = lazy(() => import('./pages/customer/BookingConfirmation.jsx'))
-const FleetManagerDashboard = lazy(() => import('./pages/FleetManagerDashboard.jsx'))
-const FleetManagerProfile = lazy(() => import('./pages/FleetManagerProfile.jsx'))
-const DashboardPage = lazy(() => import('./pages/fleetmanager/DashboardPage').then((module) => ({ default: module.DashboardPage })))
-const VehiclesPage = lazy(() => import('./pages/fleetmanager/VehiclesPage').then((module) => ({ default: module.VehiclesPage })))
-const AlertsPage = lazy(() => import('./pages/fleetmanager/AlertsPage').then((module) => ({ default: module.AlertsPage })))
-const RouteOptimizationPage = lazy(() => import('./pages/fleetmanager/RouteOptimizationPage').then((module) => ({ default: module.RouteOptimizationPage })))
-const TrafficAnalyticsPage = lazy(() => import('./pages/fleetmanager/TrafficAnalyticsPage').then((module) => ({ default: module.TrafficAnalyticsPage })))
+const CustomerBookingConfirmation = lazy(() => import('./pages/customer/CustomerBookingConfirmation.jsx'))
+const FleetManagerDashboard = lazy(() => import('./pages/fleetmanager/FleetManagerDashboard.jsx'))
+const FleetManagerProfile = lazy(() => import('./pages/fleetmanager/FleetManagerProfile.jsx'))
+const FleetManagerDashboardPage = lazy(() => import('./pages/fleetmanager/FleetManagerDashboardPage').then((module) => ({ default: module.DashboardPage })))
+const FleetManagerVehiclesPage = lazy(() => import('./pages/fleetmanager/FleetManagerVehiclesPage').then((module) => ({ default: module.VehiclesPage })))
+const FleetManagerAlertsPage = lazy(() => import('./pages/fleetmanager/FleetManagerAlertsPage').then((module) => ({ default: module.AlertsPage })))
+const FleetManagerRouteOptimizationPage = lazy(() => import('./pages/fleetmanager/FleetManagerRouteOptimizationPage').then((module) => ({ default: module.RouteOptimizationPage })))
+const FleetManagerTrafficAnalyticsPage = lazy(() => import('./pages/fleetmanager/FleetManagerTrafficAnalyticsPage').then((module) => ({ default: module.TrafficAnalyticsPage })))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard.jsx'))
-const FleetAnalytics = lazy(() => import('./pages/admin/FleetAnalytics.jsx'))
-const AdminTrafficAnalytics = lazy(() => import('./pages/admin/TrafficAnalytics.jsx'))
-const RouteReports = lazy(() => import('./pages/admin/RouteReports.jsx'))
-const AISettings = lazy(() => import('./pages/admin/AISettings.jsx'))
-const Users = lazy(() => import('./pages/admin/Users.jsx'))
+const AdminFleetAnalytics = lazy(() => import('./pages/admin/AdminFleetAnalytics.jsx'))
+const AdminTrafficAnalytics = lazy(() => import('./pages/admin/AdminTrafficAnalytics.jsx'))
+const AdminRouteReports = lazy(() => import('./pages/admin/AdminRouteReports.jsx'))
+const AdminAISettings = lazy(() => import('./pages/admin/AdminAISettings.jsx'))
+const AdminUsers = lazy(() => import('./pages/admin/AdminUsers.jsx'))
 const AdminProfile = lazy(() => import('./pages/admin/AdminProfile.jsx'))
 const DriverDashboard = lazy(() => import('./pages/driver/DriverDashboard.jsx'))
-const DriverLiveTracking = lazy(() => import('./pages/driver/LiveTracking.jsx'))
-const DriverTrips = lazy(() => import('./pages/driver/Trips.jsx'))
-const DriverEarnings = lazy(() => import('./pages/driver/Earnings.jsx'))
+const DriverLiveTracking = lazy(() => import('./pages/driver/DriverLiveTracking.jsx'))
+const DriverTrips = lazy(() => import('./pages/driver/DriverTrips.jsx'))
+const DriverEarnings = lazy(() => import('./pages/driver/DriverEarnings.jsx'))
 const DriverProfile = lazy(() => import('./pages/driver/DriverProfile.jsx'))
 const DriverSettings = lazy(() => import('./pages/driver/DriverSettings.jsx'))
 
@@ -60,7 +60,7 @@ function DashboardRouteEntry() {
     return <Navigate to="/driver/dashboard" replace />
   }
 
-  return <DashboardPage />
+  return <FleetManagerDashboardPage />
 }
 
 function App() {
@@ -83,10 +83,10 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<DashboardRouteEntry />} />
-            <Route path="/vehicles" element={<VehiclesPage />} />
-            <Route path="/alerts" element={<AlertsPage />} />
-            <Route path="/route-optimization" element={<RouteOptimizationPage />} />
-            <Route path="/traffic-analytics" element={<TrafficAnalyticsPage />} />
+            <Route path="/vehicles" element={<FleetManagerVehiclesPage />} />
+            <Route path="/alerts" element={<FleetManagerAlertsPage />} />
+            <Route path="/route-optimization" element={<FleetManagerRouteOptimizationPage />} />
+            <Route path="/traffic-analytics" element={<FleetManagerTrafficAnalyticsPage />} />
           </Route>
           <Route
             path="/fleetmanager"
@@ -112,12 +112,12 @@ function App() {
           >
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<CustomerDashboard />} />
-            <Route path="plan" element={<PlanTrip />} />
-            <Route path="bookings" element={<MyBookings />} />
-            <Route path="trips" element={<MyTrips />} />
+            <Route path="plan" element={<CustomerPlanTrip />} />
+            <Route path="bookings" element={<CustomerMyBookings />} />
+            <Route path="trips" element={<CustomerMyTrips />} />
             <Route path="profile" element={<CustomerProfile />} />
             <Route path="settings" element={<CustomerSettings />} />
-            <Route path="booking/confirmation" element={<BookingConfirmation />} />
+            <Route path="booking/confirmation" element={<CustomerBookingConfirmation />} />
           </Route>
           <Route
             path="/admin"
@@ -129,11 +129,11 @@ function App() {
           >
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="fleet-analytics" element={<FleetAnalytics />} />
+            <Route path="fleet-analytics" element={<AdminFleetAnalytics />} />
             <Route path="traffic-analytics" element={<AdminTrafficAnalytics />} />
-            <Route path="route-reports" element={<RouteReports />} />
-            <Route path="ai-settings" element={<AISettings />} />
-            <Route path="users" element={<Users />} />
+            <Route path="route-reports" element={<AdminRouteReports />} />
+            <Route path="ai-settings" element={<AdminAISettings />} />
+            <Route path="users" element={<AdminUsers />} />
             <Route path="profile" element={<AdminProfile />} />
           </Route>
           <Route

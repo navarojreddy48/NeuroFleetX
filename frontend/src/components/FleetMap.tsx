@@ -38,9 +38,20 @@ export const FleetMap = ({
   circles,
   className,
 }: FleetMapProps) => {
+  // Validate center coordinates
+  if (!center || !Array.isArray(center) || center.length !== 2 || typeof center[0] !== 'number' || typeof center[1] !== 'number') {
+    return (
+      <div className={className ?? 'h-[320px] w-full overflow-hidden rounded-2xl'}>
+        <div className="flex h-full items-center justify-center bg-slate-100 dark:bg-slate-800">
+          <p className="text-sm text-slate-600 dark:text-slate-400">Invalid map coordinates</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={className ?? 'h-[320px] w-full overflow-hidden rounded-2xl'}>
-      <LeafletSuspense>
+      <LeafletSuspense fallbackClassName="h-full w-full animate-pulse bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
         <MapContainer center={center} zoom={zoom} className="h-full w-full rounded-2xl">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

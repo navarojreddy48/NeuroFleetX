@@ -10,8 +10,8 @@ import lombok.Getter;
 public class UserProfileResponse {
     private String fullName;
     private String email;
-    private String gender;
     private String role;
     private String licenseNumber;
-    private String phoneNumber;
+    private String status;
+    private Double rating;
 }
