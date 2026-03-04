@@ -7,7 +7,7 @@ export type FleetVehicle = {
   speed: number
   type: 'EV' | 'Diesel'
   battery: number
-  status: 'Idle' | 'Active'
+  status: 'Idle' | 'Active' | 'Available' | 'In Use' | 'Maintenance'
   driverLicense: string
   engineTemperature: number
   tireWear: number

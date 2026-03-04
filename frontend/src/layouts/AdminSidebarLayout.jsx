@@ -2,9 +2,9 @@ import { motion } from 'framer-motion'
 import {
   BrainCircuit,
   ChartNoAxesCombined,
+  ChevronLeft,
+  ChevronRight,
   LayoutDashboard,
-  LogOut,
-  Menu,
   Route,
   TrafficCone,
   User,
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { TopNavbar } from '../components/TopNavbar'
 
 const navItems = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -28,6 +29,7 @@ function AdminSidebarLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
 
   const adminName = useMemo(() => {
     const storedName = localStorage.getItem('authName')
@@ -53,62 +55,75 @@ function AdminSidebarLayout() {
 
   const avatarInitial = (adminName || 'A').charAt(0).toUpperCase()
 
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('role')
-    navigate('/login')
-  }
-
-  const sidebarContent = (
+  const sidebarContent = (collapsed) => (
     <div className="flex h-full flex-col">
-      <div className="border-b border-slate-200 px-5 py-5">
-        <p className="text-xl font-bold tracking-tight text-slate-900">NeuroFleetX</p>
-        <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-slate-500">Admin Panel</p>
-      </div>
-
-      <nav className="flex-1 space-y-1 px-3 py-4">
-        {navItems.map((item) => {
-          const Icon = item.icon
-
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={() => setIsMobileSidebarOpen(false)}
-              className={({ isActive }) =>
-                [
-                  'group flex items-center gap-3 rounded-r-xl border-l-4 px-3 py-2.5 text-sm font-medium transition-all duration-200',
-                  isActive
-                    ? 'border-green-500 bg-green-50 text-green-600'
-                    : 'border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-                ].join(' ')
-              }
-            >
-              <Icon className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:scale-110" />
-              <span>{item.label}</span>
-            </NavLink>
-          )
-        })}
-      </nav>
-
-      <div className="border-t border-slate-200 p-3">
+      <div className="border-b-2 border-emerald-200 bg-gradient-to-r from-emerald-400 to-teal-400 px-4 py-6">
+        {!collapsed && (
+          <div>
+            <p className="text-xs font-black uppercase tracking-widest text-white">NEUROFLEET</p>
+            <p className="mt-1 text-lg font-bold text-white">Admin Portal</p>
+          </div>
+        )}
         <button
-          type="button"
-          onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+          onClick={() => setCollapsed(!collapsed)}
+          className="mt-3 rounded-lg border-2 border-white/30 bg-white/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-white/30"
         >
-          <LogOut className="h-4 w-4" />
-          Logout
+          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </button>
       </div>
+
+      <nav className="flex-1 overflow-y-auto px-2 py-4">
+        <ul className="space-y-2">
+          {navItems.map((item) => {
+            const Icon = item.icon
+
+            return (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  onClick={() => setIsMobileSidebarOpen(false)}
+                  className={({ isActive }) =>
+                    `group flex items-center gap-3 rounded-xl px-4 py-3 font-bold transition-all ${
+                      isActive
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/30'
+                        : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-600'
+                    } ${collapsed ? 'justify-center' : ''}`
+                  }
+                >
+                  <Icon className="h-5 w-5 shrink-0" />
+                  {!collapsed && <span className="text-sm">{item.label}</span>}
+                </NavLink>
+              </li>
+            )
+          })}
+        </ul>
+      </nav>
+
+      {!collapsed && (
+        <div className="border-t-2 border-emerald-200 p-4">
+          <div className="rounded-xl bg-white p-3 shadow-md">
+            <p className="text-xs font-bold uppercase text-gray-600">Quick Stats</p>
+            <div className="mt-2 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span className="text-gray-600">Total Users:</span>
+                <span className="font-black text-emerald-600">128</span>
+              </div>
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span className="text-gray-600">Active Fleets:</span>
+                <span className="font-black text-emerald-600">42</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-100 transition-colors">
       <div className="flex">
-        <aside className="sticky top-0 hidden h-screen w-[260px] border-r border-slate-200 bg-slate-50 lg:block">
-          {sidebarContent}
+        <aside className={`fixed left-0 top-0 z-30 hidden h-screen border-r-2 border-emerald-200 bg-white shadow-2xl transition-all duration-300 lg:block ${collapsed ? 'w-20' : 'w-72'}`}>
+          {sidebarContent(collapsed)}
         </aside>
 
         {isMobileSidebarOpen && (
@@ -119,8 +134,8 @@ function AdminSidebarLayout() {
               aria-label="Close sidebar backdrop"
               onClick={() => setIsMobileSidebarOpen(false)}
             />
-            <aside className="absolute left-0 top-0 h-full w-[260px] border-r border-slate-200 bg-slate-50 shadow-xl">
-              <div className="flex items-center justify-end border-b border-slate-200 px-3 py-2.5">
+            <aside className="absolute left-0 top-0 h-full w-72 border-r-2 border-emerald-200 bg-white shadow-xl">
+              <div className="flex items-center justify-end border-b-2 border-emerald-200 px-3 py-2.5">
                 <button
                   type="button"
                   onClick={() => setIsMobileSidebarOpen(false)}
@@ -130,38 +145,15 @@ function AdminSidebarLayout() {
                   <X className="h-4 w-4" />
                 </button>
               </div>
-              {sidebarContent}
+              {sidebarContent(false)}
             </aside>
           </div>
         )}
 
-        <div className="flex min-h-screen flex-1 flex-col overflow-hidden">
-          <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur sm:px-6 lg:px-6">
-            <div className="flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setIsMobileSidebarOpen(true)}
-                className="rounded-lg border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-100 lg:hidden"
-                aria-label="Open sidebar"
-              >
-                <Menu className="h-4 w-4" />
-              </button>
+        <div className={`flex min-h-screen flex-1 flex-col overflow-hidden transition-all duration-300 ${collapsed ? 'lg:pl-20' : 'lg:pl-72'}`}>
+          <TopNavbar onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)} />
 
-              <div className="ml-auto flex items-center gap-3">
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-slate-900">{adminName}</p>
-                  <span className="inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-                    {role}
-                  </span>
-                </div>
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700">
-                  {avatarInitial}
-                </div>
-              </div>
-            </div>
-          </header>
-
-          <main className="flex-1 overflow-y-auto p-6">
+          <main className="flex-1 overflow-y-auto p-6 pt-24">
             <motion.div
               key={location.pathname}
               initial={{ opacity: 0, y: 6 }}

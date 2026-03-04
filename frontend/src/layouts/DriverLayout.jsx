@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import DriverSidebar from '../components/driver/DriverSidebar'
 import { driverIdentity } from '../data/driverMockData'
+import { TopNavbar } from '../components/TopNavbar'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081'
 
@@ -22,6 +23,7 @@ function resolveToken() {
 
 function DriverLayout() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
   const [sidebarIdentity, setSidebarIdentity] = useState(driverIdentity)
 
   const fallbackIdentity = useMemo(() => {
@@ -79,29 +81,16 @@ function DriverLayout() {
   }, [fallbackIdentity])
 
   return (
-    <div className="flex h-screen bg-slate-100">
+    <div className="flex h-screen overflow-hidden bg-slate-100">
       <DriverSidebar
-        name={sidebarIdentity.name}
-        role={sidebarIdentity.role}
-        avatarInitial={sidebarIdentity.avatarInitial}
-        mobileOpen={isMobileSidebarOpen}
-        onClose={() => setIsMobileSidebarOpen(false)}
+        isCollapsed={collapsed}
+        onToggle={() => setCollapsed(!collapsed)}
       />
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <header className="sticky top-0 z-20 flex items-center border-b border-slate-200 bg-white px-4 py-3 lg:hidden">
-          <button
-            type="button"
-            onClick={() => setIsMobileSidebarOpen(true)}
-            className="rounded-lg border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
-            aria-label="Open sidebar"
-          >
-            <Menu className="h-4 w-4" />
-          </button>
-          <p className="ml-3 text-sm font-semibold text-slate-900">Driver Panel</p>
-        </header>
+      <div className="flex flex-1 flex-col overflow-hidden transition-all duration-300" style={{ marginLeft: collapsed ? '80px' : '288px' }}>
+        <TopNavbar onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)} />
 
-        <main className="flex-1 overflow-y-auto bg-slate-100 p-6">
+        <main className="flex-1 overflow-y-auto bg-slate-100 p-6 pt-24">
           <Outlet />
         </main>
       </div>

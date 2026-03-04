@@ -31,14 +31,17 @@ export const GlassModal = ({ open, title, onClose, className, children }: GlassM
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
             className={cn(
-              'w-full max-w-3xl rounded-2xl border p-6 shadow-2xl backdrop-blur-xl',
+              'w-full max-w-3xl max-h-[90vh] flex flex-col rounded-2xl border shadow-2xl backdrop-blur-xl',
               theme === 'light'
                 ? 'border-slate-300 bg-white/95'
                 : 'border-white/15 bg-zinc-900/85',
               className ?? '',
             )}
           >
-            <div className="mb-5 flex items-center justify-between">
+            <div className="flex-shrink-0 sticky top-0 z-10 p-6 pb-4 flex items-center justify-between border-b backdrop-blur-xl" style={{
+              backgroundColor: theme === 'light' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(24, 24, 27, 0.85)',
+              borderColor: theme === 'light' ? 'rgb(226, 232, 240)' : 'rgba(255, 255, 255, 0.1)'
+            }}>
               <h3 className={cn('text-lg font-semibold', theme === 'light' ? 'text-slate-900' : 'text-zinc-100')}>{title}</h3>
               <button
                 onClick={onClose}
@@ -52,7 +55,9 @@ export const GlassModal = ({ open, title, onClose, className, children }: GlassM
                 Close
               </button>
             </div>
-            {children}
+            <div className="flex-1 overflow-y-auto p-6 pt-4">
+              {children}
+            </div>
           </motion.div>
         </motion.div>
       ) : null}
