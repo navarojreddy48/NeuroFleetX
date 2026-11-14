@@ -120,15 +120,6 @@ Run the Spring Boot application:
 mvn spring-boot:run
 ```
 
-## 📸 Application Screenshots
-
-Add screenshots of your application here to showcase its interface and functionality.
-
-```markdown
-![Dashboard](screenshots/dashboard.png)
-![Route Optimization](screenshots/route-optimization.png)
-```
-
 ## 🎯 Project Objectives
 
 - Improve fleet management efficiency.
