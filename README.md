@@ -1,50 +1,158 @@
-# TASK: Remove Numbered Section Labels Throughout the Portfolio
+# 🚀 NeuroFleetX
+### Intelligent Fleet Management & Route Optimization Platform
 
-I want to remove all small numbered section labels displayed above section headings across my entire portfolio.
+**NeuroFleetX** is a modern, full-stack urban mobility platform designed to simplify fleet operations and improve transportation efficiency through intelligent route optimization and centralized fleet management.
 
-Examples of labels to remove:
+The platform combines a responsive React frontend with a Spring Boot backend to provide a scalable foundation for managing transportation workflows.
 
-- 01 / HOME
-- 02 / ABOUT
-- 03 / TOOLKIT
-- 04 / EXPERIENCE
-- 05 / EDUCATION
-- 06 / PROJECTS
-- 07 / CONTACT
+---
 
-These are examples. Find and remove all similar numbered section labels throughout the website.
+## 🌟 Project Overview
 
-## Requirements
+NeuroFleetX aims to make fleet management smarter, more efficient, and easier to manage by bringing essential transportation operations into a unified web application.
 
-1. Completely remove the numbered section labels.
-2. Remove the associated slash separators and section numbers.
-3. Do not replace them with other labels or numbers.
-4. Preserve all actual section headings.
-5. Preserve all section descriptions and content.
-6. Maintain the existing spacing and alignment after removing the labels.
-7. Adjust unnecessary top margins or gaps left behind.
-8. Apply this consistently across desktop, tablet and mobile layouts.
+The project focuses on:
+- Intelligent route optimization.
+- Efficient fleet and transportation management.
+- Centralized operational workflows.
+- Responsive and user-friendly dashboards.
+- Scalable backend architecture.
 
-## Important
+## ✨ Key Features
 
-Do not remove:
-- Main section headings.
-- Hero taglines.
-- Project numbers used for actual project identification.
-- Navigation links.
-- Important technical information.
-- Project descriptions.
-- Other meaningful content.
+- **Fleet Management:** Centralized management of fleet-related information and operations.
+- **Route Optimization:** Support for optimized transportation routes and efficient journey planning.
+- **Smart Transportation:** Technology-driven approach to improving urban mobility.
+- **Interactive Dashboard:** Modern interface for accessing and managing platform information.
+- **Backend API:** Spring Boot-based backend for handling application operations.
+- **Responsive UI:** React-based interface styled with Tailwind CSS.
 
-Only remove the small decorative numbered labels such as `02 / ABOUT`.
+## 🛠️ Technology Stack
 
-## Implementation
+| Category | Technologies |
+|---|---|
+| Frontend | React.js, Vite |
+| Styling | Tailwind CSS |
+| Backend | Java, Spring Boot |
+| Build Tool | Maven |
+| Language | JavaScript, Java |
+| Architecture | Full-Stack Monorepo |
 
-- Inspect all relevant React components and section components.
-- Search for hardcoded labels and reusable section-label components.
-- Remove the labels at their source rather than hiding them with CSS.
-- Check all sections for consistency.
-- Preserve the existing dark theme, PNR branding, typography, animations and layout.
-- Run the production build and fix any errors.
+## 🏗️ Project Architecture
 
-Do not redesign the website. This is a targeted cleanup task.
+NeuroFleetX follows a modular full-stack architecture with separate frontend and backend applications.
+
+```text
+NeuroFleetX/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
+│
+├── backend/
+│   ├── src/
+│   ├── pom.xml
+│   └── ...
+│
+├── test-route-optimization.md
+├── .gitignore
+└── README.md
+```
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
+
+Make sure you have installed:
+
+- Node.js and npm
+- Java JDK
+- Apache Maven
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/navarojreddy48/NeuroFleetX.git
+
+cd NeuroFleetX
+```
+
+### 2. Setup Frontend
+
+Navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Build the frontend:
+
+```bash
+npm run build
+```
+
+### 3. Setup Backend
+
+Open another terminal and navigate to the backend directory:
+
+```bash
+cd backend
+```
+
+Run the Spring Boot application:
+
+```bash
+mvn spring-boot:run
+```
+
+## 📸 Application Screenshots
+
+Add screenshots of your application here to showcase its interface and functionality.
+
+```markdown
+![Dashboard](screenshots/dashboard.png)
+![Route Optimization](screenshots/route-optimization.png)
+```
+
+## 🎯 Project Objectives
+
+- Improve fleet management efficiency.
+- Explore intelligent route optimization techniques.
+- Simplify transportation management workflows.
+- Develop a scalable full-stack application.
+- Provide an intuitive and accessible user experience.
+
+## 🔮 Future Enhancements
+
+- Real-time vehicle tracking.
+- AI-powered route recommendations.
+- Predictive vehicle maintenance.
+- Advanced fleet analytics and reporting.
+- Enhanced transportation optimization.
+
+## 👨‍💻 Developer
+
+**Navaroj Reddy**
+
+GitHub: [@navarojreddy48](https://github.com/navarojreddy48)
+
+---
+
+⭐ If you find this project interesting, consider giving it a star!
+
+**NeuroFleetX – Driving Smarter, Optimizing Further.**
